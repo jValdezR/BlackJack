@@ -1,26 +1,29 @@
-/**
- * C = Trebol
- * D = Diamantes
- * H = Corazones
- * S = Picas
- */
 (() => {
     'use strict'
-    let deck = [];
-    const tipos = ['C', 'H', 'D', 'S'];
-    const especiales = ['A', 'J', 'Q', 'K'];
-    let puntosJugador = 0, puntosComputadora = 0;
-    //Referencias del HTML
+    let deck = [],
+        puntosJugadores = [];
 
-    const btnPedir = document.querySelector('#btnPedir');
-    const btnDetener = document.querySelector('#btnDetener');
-    const btnNuevo = document.querySelector('#btnNuevo');
+    const tipos = ['C', 'H', 'D', 'S'],
+        especiales = ['A', 'J', 'Q', 'K'],
+        //Referencias del HTML
 
-    const puntosHTML = document.querySelectorAll('small');
-    const divCartaJugador = document.querySelector('#jugador-cartas')
-    const divCartaComputadora = document.querySelector('#computadora-cartas')
-    //crea el deck
+        btnPedir = document.querySelector('#btnPedir'),
+        btnDetener = document.querySelector('#btnDetener'),
+        btnNuevo = document.querySelector('#btnNuevo'),
+        puntosHTML = document.querySelectorAll('small'),
+        divCartaJugador = document.querySelector('#jugador-cartas'),
+        divCartaComputadora = document.querySelector('#computadora-cartas');
+
+    const inicializarJuego = (numJugadores = 2) => {
+        deck = crearDeck();
+        for(let i = 0;i<numJugadores;i++){
+            puntosJugadores.push(0);
+        }
+    }
+
+    //Crea el deck
     const crearDeck = () => {
+        deck = [];
         for (let i = 2; i <= 10; i++) {
             for (let j of tipos)
                 deck.push(i + j);
@@ -30,32 +33,29 @@
                 deck.push(j + i);
             }
         }
-        deck = _.shuffle(deck);//Revuelve la baraja
-
-        return deck;
+        return _.shuffle(deck);//Revuelve la baraja
     }
-    crearDeck();
+
     //Permite tomar la carta
     const pedirCarta = () => {
         if (deck.length === 0) throw 'No hay cartas en el deck';
-        let carta = deck.pop();
-
-        //Carta debe ser de la baraja
-        return carta;
+        return deck.pop();
     }
     //Calcular el calor de la carta
     const valorCarta = (carta) => {
         const valor = carta.substring(0, carta.length - 1);
 
         return (isNaN(valor)) ? ((valor === 'A') ? 11 : 10) : valor * 1;
-        // if (isNaN(valor)) {
-        //     puntos = (valor === 'A') ? 11 : 10;
-        // }
-        // else {
-        //     puntos = valor * 1;
-        // }
-        // return puntos;
     }
+
+
+
+    const acumularPuntos = () => {
+
+    }
+
+
+
 
     //Turno de la computadora
     const turnoComputadora = (puntosMinimo) => {
@@ -112,8 +112,7 @@
     });
 
     btnNuevo.addEventListener('click', () => {
-        deck = [];
-        crearDeck();
+        inicializarJuego();
         puntosJugador = 0, puntosComputadora = 0;
         divCartaJugador.innerHTML = '';
         divCartaComputadora.innerHTML = '';
